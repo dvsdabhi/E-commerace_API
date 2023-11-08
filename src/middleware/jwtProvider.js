@@ -1,10 +1,12 @@
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
-
-const SECRET_KEY = "avgfdvvclkfkvotdpjvhdhfpwrujmlvkbdjbkmdbedvcwsxw";
 
 //generate jwt token using userById
 const generateToken = (userId) => {
-  const token = jwt.sign(userId, SECRET_KEY, { expiresIn: "48h" });
+  // console.log("userId----------", userId);
+  const payload = { userId };
+  const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "48h" });
+  // console.log("token----------", token);
   return token;
 };
 

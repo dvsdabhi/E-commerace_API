@@ -16,10 +16,10 @@ app.get("/", (req, res) => {
 });
 
 const authRouters = require("./src/Routes/auth.route.js");
-app.use("/auth", authRouters);
+app.use("/api/auth", authRouters);
 
 const userRouters = require("./src/Routes/user.route.js");
-app.use("/users", userRouters);
+app.use("/api/users", userRouters);
 
 app.listen(PORT, async () => {
   await DB();
