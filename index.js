@@ -21,6 +21,9 @@ app.use("/api/auth", authRouters);
 const userRouters = require("./src/Routes/user.route.js");
 app.use("/api/users", userRouters);
 
+const adminRouters = require("./src/Routes/admin.route.js");
+app.use("/api", adminRouters);
+
 app.listen(PORT, async () => {
   await DB();
   console.log("ecommerce api listing on PORT :", PORT);
