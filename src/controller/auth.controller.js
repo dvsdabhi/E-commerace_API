@@ -32,6 +32,7 @@ const register = async (req, res) => {
   }
 };
 
+// user SignIn
 const login = async (req, res) => {
   const { password, email } = req.body;
   console.log("password--->>>>>>", password);

@@ -2,16 +2,21 @@ const Product = require("../models/product.model");
 
 // Add product api
 const addProduct = async (req, res) => {
-  const { title, description, price, imageUrl } = req.body;
+  const { title, description, price, imageUrl, discountPersent } = req.body;
   try {
     const product = await Product.findOne({ title });
+    console.log("product==", product);
     if (product) {
       return res.status(404).send({ error: "product already exists" });
     }
+    const discount_price = (price * discountPersent) / 100;
+    const sell_price = price - discount_price;
     const newProduct = new Product({
       title,
       description,
       price,
+      discountPersent,
+      discountedPrice: sell_price,
       imageUrl,
     });
     newProduct.save();
@@ -44,9 +49,11 @@ const getSingleProduct = async (req, res) => {
     if (!singleProduct) {
       return res.status(404).send({ error: "enter a valid product id" });
     }
-    return res
-      .status(200)
-      .send({ status: 200, message:"product get successfully", singleProduct: singleProduct });
+    return res.status(200).send({
+      status: 200,
+      message: "product get successfully",
+      singleProduct: singleProduct,
+    });
   } catch (error) {
     return res.status(404).send({ error: "Not found this product" });
   }
