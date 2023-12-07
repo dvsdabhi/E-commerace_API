@@ -22,7 +22,7 @@ const register = async (req, res) => {
       email,
     });
     const token = jwtProvider.generateToken(newUser._id);
-    console.log("token------->>>>>>>>>", token);
+    // console.log("token------->>>>>>>>>", token);
     newUser.save();
     return res
       .status(200)
@@ -35,11 +35,11 @@ const register = async (req, res) => {
 // user SignIn
 const login = async (req, res) => {
   const { password, email } = req.body;
-  console.log("password--->>>>>>", password);
-  console.log("email--->>>>>>", email);
+  // console.log("password--->>>>>>", password);
+  // console.log("email--->>>>>>", email);
   try {
     const user = await User.findOne({ email });
-    console.log("user--->>>>>>", user);
+    // console.log("user--->>>>>>", user);
 
     if (!user) {
       return res
@@ -50,9 +50,9 @@ const login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).send({ message: "Invalid Password..." });
     }
-    console.log("JWT---->>>>>>>>>>");
+    // console.log("JWT---->>>>>>>>>>");
     const jwt = jwtProvider.generateToken(user._id);
-    console.log("JWT---->>>>>>>>>>", jwt);
+    // console.log("JWT---->>>>>>>>>>", jwt);
     return res
       .status(200)
       .send({ status: 200, token: jwt, message: "login success" });

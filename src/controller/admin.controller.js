@@ -5,7 +5,7 @@ const addProduct = async (req, res) => {
   const { title, description, price, imageUrl, discountPersent } = req.body;
   try {
     const product = await Product.findOne({ title });
-    console.log("product==", product);
+    // console.log("product==", product);
     if (product) {
       return res.status(404).send({ error: "product already exists" });
     }
