@@ -30,6 +30,15 @@ app.use("/api", cartRouters);
 const addressRouters = require("./src/Routes/address.route.js");
 app.use("/api", addressRouters);
 
+const orderRouter = require("./src/Routes/order.route.js");
+app.use("/api", orderRouter);
+
+const paymentRouter = require("./src/Routes/payment.route.js");
+app.use("/api", paymentRouter);
+
+const searchRouter = require("./src/Routes/search.route.js");
+app.use("/api", searchRouter);
+
 app.listen(PORT, async () => {
   await DB();
   console.log("ecommerce api listing on PORT :", PORT);
