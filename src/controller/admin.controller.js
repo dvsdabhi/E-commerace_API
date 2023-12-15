@@ -2,7 +2,20 @@ const Product = require("../models/product.model");
 
 // Add product api
 const addProduct = async (req, res) => {
-  const { title, description, price, imageUrl, discountPersent } = req.body;
+  const {
+    title,
+    description,
+    price,
+    discountPersent,
+    brand,
+    color,
+    quantity,
+    sizes,
+    imageUrl,
+    category,
+    childCategory,
+    subChildCategory,
+  } = req.body;
   try {
     const product = await Product.findOne({ title });
     // console.log("product==", product);
@@ -18,6 +31,13 @@ const addProduct = async (req, res) => {
       discountPersent,
       discountedPrice: sell_price,
       imageUrl,
+      brand,
+      color,
+      quantity,
+      category,
+      childCategory,
+      subChildCategory,
+      sizes,
     });
     newProduct.save();
     return res.status(200).send({ message: "Product added" });

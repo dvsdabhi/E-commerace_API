@@ -21,12 +21,11 @@ const register = async (req, res) => {
       password: hashPassword,
       email,
     });
-     const token = jwtProvider.generateToken(newUser._id);
-    // console.log("token------->>>>>>>>>", token);
+
     newUser.save();
     return res
       .status(200)
-      .send({ status: 200,token: token, message: "user register success.." });
+      .send({ status: 200, message: "user register success.." });
   } catch (error) {
     return res.status(500).send({ error: error.message });
   }
@@ -39,7 +38,7 @@ const login = async (req, res) => {
   // console.log("email--->>>>>>", email);
   try {
     const user = await User.findOne({ email });
-    // console.log("user--->>>>>>", user);
+    console.log("user--->>>>>>", user);
 
     if (!user) {
       return res
@@ -51,11 +50,19 @@ const login = async (req, res) => {
       return res.status(401).send({ message: "Invalid Password..." });
     }
     // console.log("JWT---->>>>>>>>>>");
-    const jwt = jwtProvider.generateToken(user._id);
-    // console.log("JWT---->>>>>>>>>>", jwt);
-    return res
-      .status(200)
-      .send({ status: 200, token: jwt, message: "login success" });
+    if (user.email === "divyeshd623@gmail.com") {
+      user.role = "admin";
+      // Update the user role to "admin" in the database
+      await User.updateOne({ _id: user._id }, { role: "admin" });
+    }
+    const jwt = jwtProvider.generateToken(user._id, user.role);
+    console.log("JWT---->>>>>>>>>>", jwt);
+    return res.status(200).send({
+      status: 200,
+      token: jwt,
+      role: user.role,
+      message: "login success",
+    });
   } catch (error) {
     return res.status(500).send({ error: error.message });
   }
