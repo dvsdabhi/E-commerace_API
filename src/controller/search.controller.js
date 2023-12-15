@@ -23,17 +23,19 @@ const discount_range = async (req, res) => {
 
 const price_range = async (req, res) => {
   const { price } = req.params;
-  console.log(price);
+  // console.log(price);
   try {
     const filterData = await Product.find();
     if (!filterData) {
       return res.status(400).send({ message: "not data found" });
     }
     const prc = price.split("-");
-    console.log(prc[0]);
-    console.log(prc[1]);
+    // console.log(prc[0]);
+    // console.log(prc[1]);
     const filterPriceRange = filterData.filter(
-      (item) => item.discountedPrice >= parseInt(prc[0]) && item.discountedPrice < parseInt(prc[1])
+      (item) =>
+        item.discountedPrice >= parseInt(prc[0]) &&
+        item.discountedPrice < parseInt(prc[1])
     );
     if (filterPriceRange.length <= 0) {
       return res.status(400).send({ message: "not found" });

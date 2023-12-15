@@ -21,12 +21,12 @@ const register = async (req, res) => {
       password: hashPassword,
       email,
     });
-    const token = jwtProvider.generateToken(newUser._id);
+     const token = jwtProvider.generateToken(newUser._id);
     // console.log("token------->>>>>>>>>", token);
     newUser.save();
     return res
       .status(200)
-      .send({ status: 200, token: token, message: "user register success.." });
+      .send({ status: 200,token: token, message: "user register success.." });
   } catch (error) {
     return res.status(500).send({ error: error.message });
   }
