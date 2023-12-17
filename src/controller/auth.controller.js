@@ -38,7 +38,7 @@ const login = async (req, res) => {
   // console.log("email--->>>>>>", email);
   try {
     const user = await User.findOne({ email });
-    console.log("user--->>>>>>", user);
+    // console.log("user--->>>>>>", user);
 
     if (!user) {
       return res
@@ -56,7 +56,7 @@ const login = async (req, res) => {
       await User.updateOne({ _id: user._id }, { role: "admin" });
     }
     const jwt = jwtProvider.generateToken(user._id, user.role);
-    console.log("JWT---->>>>>>>>>>", jwt);
+    // console.log("JWT---->>>>>>>>>>", jwt);
     return res.status(200).send({
       status: 200,
       token: jwt,

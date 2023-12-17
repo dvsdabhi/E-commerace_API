@@ -1,4 +1,5 @@
 const Product = require("../models/product.model");
+const Order = require("../models/order.model");
 
 // Add product api
 const addProduct = async (req, res) => {
@@ -23,7 +24,7 @@ const addProduct = async (req, res) => {
       return res.status(404).send({ error: "product already exists" });
     }
     const discount_price = (price * discountPersent) / 100;
-    const sell_price = price - discount_price;
+    const sell_price = (price - discount_price).toFixed(0);
     const newProduct = new Product({
       title,
       description,
@@ -79,4 +80,47 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
-module.exports = { addProduct, getProduct, getSingleProduct };
+//delete product 
+
+const deleteProduct = async(req,res) => {
+  const {product_Id} = req.params;
+  try {
+    const product = await Product.find({_id:product_Id});
+    if(product){
+      const item = await Product.findByIdAndDelete({_id:product_Id});
+      return res.status(200).send({message:"product deleted successfully"});
+    }
+  } catch (error) {
+    return res.status(200).send({message:error.message});
+  }
+}
+
+// view order logic
+
+const viewOrder = async(req,res)=>{
+  try {
+    const orders = await Order.find();
+    if(!orders){
+      return res.status(404).send({message:"no order found"});
+    }
+    return res.status(200).send({message:"order get successfully",orders:orders});
+  } catch (error) {
+    return res.status(200).send({message:error.message});
+  }
+}
+// delete order logic
+const deleteOrder = async(req,res) => {
+  const {order_Id} = req.params;
+  console.log(order_Id)
+  try {
+    const order = await Order.find({_id:order_Id});
+    if(order){
+      const item = await Order.findByIdAndDelete({_id:order_Id});
+      return res.status(200).send({message:"order deleted successfully"});
+    }
+  } catch (error) {
+    return res.status(200).send({message:error.message});
+  }
+}
+
+module.exports = { addProduct, getProduct, getSingleProduct, deleteProduct, viewOrder, deleteOrder };
