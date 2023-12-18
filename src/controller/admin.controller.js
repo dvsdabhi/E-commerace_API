@@ -1,5 +1,6 @@
 const Product = require("../models/product.model");
 const Order = require("../models/order.model");
+const User = require("../models/user.model");
 
 // Add product api
 const addProduct = async (req, res) => {
@@ -80,47 +81,101 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
-//delete product 
-
-const deleteProduct = async(req,res) => {
-  const {product_Id} = req.params;
+//delete product logic.
+const deleteProduct = async (req, res) => {
+  const { product_Id } = req.params;
   try {
-    const product = await Product.find({_id:product_Id});
-    if(product){
-      const item = await Product.findByIdAndDelete({_id:product_Id});
-      return res.status(200).send({message:"product deleted successfully"});
+    const product = await Product.find({ _id: product_Id });
+    if (product) {
+      const item = await Product.findByIdAndDelete({ _id: product_Id });
+      return res.status(200).send({ message: "product deleted successfully" });
     }
   } catch (error) {
-    return res.status(200).send({message:error.message});
+    return res.status(200).send({ message: error.message });
   }
-}
+};
 
 // view order logic
 
-const viewOrder = async(req,res)=>{
+const viewOrder = async (req, res) => {
   try {
     const orders = await Order.find();
-    if(!orders){
-      return res.status(404).send({message:"no order found"});
+    if (!orders) {
+      return res.status(404).send({ message: "no order found" });
     }
-    return res.status(200).send({message:"order get successfully",orders:orders});
+    return res
+      .status(200)
+      .send({ message: "order get successfully", orders: orders });
   } catch (error) {
-    return res.status(200).send({message:error.message});
+    return res.status(200).send({ message: error.message });
   }
-}
+};
 // delete order logic
-const deleteOrder = async(req,res) => {
-  const {order_Id} = req.params;
-  console.log(order_Id)
+const deleteOrder = async (req, res) => {
+  const { order_Id } = req.params;
   try {
-    const order = await Order.find({_id:order_Id});
-    if(order){
-      const item = await Order.findByIdAndDelete({_id:order_Id});
-      return res.status(200).send({message:"order deleted successfully"});
+    const order = await Order.find({ _id: order_Id });
+    if (order) {
+      const item = await Order.findByIdAndDelete({ _id: order_Id });
+      return res.status(200).send({ message: "order deleted successfully" });
     }
   } catch (error) {
-    return res.status(200).send({message:error.message});
+    return res.status(200).send({ message: error.message });
   }
-}
+};
 
-module.exports = { addProduct, getProduct, getSingleProduct, deleteProduct, viewOrder, deleteOrder };
+// Change order status logic.
+const changeOrderStatus = async (req, res) => {
+  const { orderStatus } = req.body;
+  const { order_Id } = req.params;
+  // console.log(orderStatus, order_Id);
+  try {
+    // const order = await Order.findById({ _id: order_id });
+    // if (!order) {
+    //   return res.status(401).send({ message: "no order found" });
+    // }
+
+    const update_status = await Order.findByIdAndUpdate(
+      { _id: order_Id },
+      { $set: { orderStatus: orderStatus } },
+      { new: true }
+    );
+    if (!update_status) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+    return res.status(200).send({
+      message: "order status updated",
+      status: update_status,
+    });
+  } catch (error) {
+    return res.status(400).send({ message: error.message });
+  }
+};
+
+// get all user logic.
+
+const allUser = async (req, res) => {
+  try {
+    const user = await User.find();
+    return res.status(200).send({
+      message: "success",
+      user: user,
+    });
+  } catch (error) {
+    return res.status(400).send({ message: error.message });
+  }
+};
+
+module.exports = {
+  addProduct,
+  getProduct,
+  getSingleProduct,
+  deleteProduct,
+  viewOrder,
+  deleteOrder,
+  changeOrderStatus,
+  allUser,
+};
