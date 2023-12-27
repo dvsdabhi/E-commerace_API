@@ -32,15 +32,12 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  sizes: [
-    {
-      name: { type: String },
-      quantity: { type: Number },
-    },
-  ],
-  imageUrl: {
+  size:{
     type: String,
   },
+  imageUrl: [{
+    type: String,
+  }],
   ratings: [
     {
       type: mongoose.Schema.Types.ObjectId,

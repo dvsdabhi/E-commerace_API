@@ -1,14 +1,15 @@
 const Product = require("../models/product.model");
 
 const discount_range = async (req, res) => {
-  const { discount } = req.params;
+  const { discount,lavelOne,lavelThree } = req.params;
+  // console.log(discount,lavelOne,lavelThree);
   try {
     const filterData = await Product.find();
     if (!filterData) {
       return res.status(400).send({ message: "not data found" });
     }
     const filterPercentage = filterData.filter(
-      (item) => item.discountPersent >= discount
+      (item) => item.discountPersent >= discount && item.category === lavelOne && item.subChildCategory === lavelThree
     );
     if (filterPercentage.length <= 0) {
       return res.status(400).send({ message: "not found" });
@@ -22,8 +23,8 @@ const discount_range = async (req, res) => {
 };
 
 const price_range = async (req, res) => {
-  const { price } = req.params;
-  // console.log(price);
+  const { price,lavelOne,lavelThree } = req.params;
+  // console.log(price,lavelOne,lavelThree);
   try {
     const filterData = await Product.find();
     if (!filterData) {
@@ -35,7 +36,7 @@ const price_range = async (req, res) => {
     const filterPriceRange = filterData.filter(
       (item) =>
         item.discountedPrice >= parseInt(prc[0]) &&
-        item.discountedPrice < parseInt(prc[1])
+        item.discountedPrice < parseInt(prc[1]) && item.category === lavelOne && item.subChildCategory === lavelThree
     );
     if (filterPriceRange.length <= 0) {
       return res.status(400).send({ message: "not found" });

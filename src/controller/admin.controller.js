@@ -63,6 +63,27 @@ const getProduct = async (req, res) => {
   } catch (error) {}
 };
 
+// get category product logic
+const getCategoryProduct = async(req,res) => {
+  const {lavelOne,lavelThree} = req.params;
+  // console.log(lavelOne,lavelThree);
+  try {
+    const product = await Product.find();
+    // console.log(product);
+    if(product){
+      const category_product = product.filter((item)=>item.category===lavelOne && item.
+        subChildCategory===lavelThree);
+        // console.log(category_product);
+      return res.status(200).send({product:category_product,message:"success"});
+    }
+    else{
+      return res.status(400).send({message:"not found product"})
+    }
+  } catch (error) {
+    return res.status(400).send({error:error.message})
+  }
+}
+
 //  get single product api
 const getSingleProduct = async (req, res) => {
   const { id } = req.params;
@@ -96,7 +117,6 @@ const deleteProduct = async (req, res) => {
 };
 
 // view order logic
-
 const viewOrder = async (req, res) => {
   try {
     const orders = await Order.find();
@@ -110,6 +130,7 @@ const viewOrder = async (req, res) => {
     return res.status(200).send({ message: error.message });
   }
 };
+
 // delete order logic
 const deleteOrder = async (req, res) => {
   const { order_Id } = req.params;
@@ -156,7 +177,6 @@ const changeOrderStatus = async (req, res) => {
 };
 
 // get all user logic.
-
 const allUser = async (req, res) => {
   try {
     const user = await User.find();
@@ -169,6 +189,42 @@ const allUser = async (req, res) => {
   }
 };
 
+// update product logic
+const updateProduct = async(req,res) => {
+  const {product_Id} = req.params;
+  const data = req.body;
+  try {
+    const updated_product = await Product.findByIdAndUpdate(
+      {_id:product_Id},
+      {$set:{
+        title:data.title,
+        description:data.description,
+        price:data.price,
+        discountedPrice:data.discountedPrice,
+        discountPersent:data.discountPersent,
+        brand:data.brand,
+        color:data.color,
+        quantity:data.quantity,
+        size:data.size,
+        imageUrl:data.imageUrl,
+        ratings:data.ratings,
+        numRatings:data.numRatings,
+        category:data.category,
+        childCategory:data.childCategory,
+        subChildCategory:data.subChildCategory,
+        createdAt:data.createdAt,
+      }},
+      { new: true }
+    );
+    return res.status(200).send({
+      message: "product updated successfully",
+      product: updated_product,
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
   addProduct,
   getProduct,
@@ -178,4 +234,6 @@ module.exports = {
   deleteOrder,
   changeOrderStatus,
   allUser,
+  updateProduct,
+  getCategoryProduct,
 };
