@@ -41,6 +41,9 @@ app.use("/api", paymentRouter);
 const searchRouter = require("./src/Routes/search.route.js");
 app.use("/api", searchRouter);
 
+const reviewRouter = require("./src/Routes/review.route.js");
+app.use("/api", reviewRouter);
+
 app.listen(PORT, async () => {
   await DB();
   console.log("ecommerce api listing on PORT :", PORT);

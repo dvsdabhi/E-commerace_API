@@ -4,7 +4,7 @@ const Product = require("../models/product.model");
 
 // add item to the cart
 const addTocart = async (req, res) => {
-  const { id } = req.body;
+  const { id,size } = req.body;
   const jwt_token = req.headers.authorization?.split(" ")[1];
   const userID = getUserIdFromToken(jwt_token);
   try {
@@ -20,7 +20,7 @@ const addTocart = async (req, res) => {
       }
       const newCartitem = new CartItem({
         product: product._id,
-        size: "xl",
+        size: size,
         price: product.price,
         userId: userID,
       });
