@@ -44,7 +44,7 @@ const userCartProduct = async (req, res) => {
 
     const checkoutProduct = [...cartProduct, { address: userAddress.address }];
 
-    console.log("checkoutProduct", checkoutProduct);
+    // console.log("checkoutProduct", checkoutProduct);
     return res
       .status(200)
       .send({ status: 200, message: "Scuccess", cartProduct: checkoutProduct });

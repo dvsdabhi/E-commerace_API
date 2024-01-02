@@ -5,6 +5,15 @@ const reviewSchema = new mongoose.Schema({
         type : String,
         required : true,
     },
+    // rating : {
+    //     type : String,
+    //     required : true,
+    // },
+    rating : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "ratings",
+        required : true,
+    },
     product : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "products",

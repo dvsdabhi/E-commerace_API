@@ -78,18 +78,25 @@ const TotalRating = async(req,res) => {
 // add new review logic
 const AddReview = async(req,res) => {
     const { product_id } = req.params;
-    const { review } = req.body;
+    const data = req.body;
     const jwt_token = req.headers.authorization?.split(" ")[1];
     const userID = getUserIdFromToken(jwt_token);
     try {
-        const existingReview  = await Review.findOne({user:userID,product:product_id});
+        const existingReview = await Review.findOne({user:userID,product:product_id});
+        const existingRating = await Rating.findOne({user:userID,product:product_id});
         if(!existingReview){
-            const addReview = new Review({
+            const ReviewData = {
                 user:userID,
                 product:product_id,
-                review:review
-            });
-            addReview.save();
+                review:data.addReview,
+            };
+            if(existingRating){
+                ReviewData.rating = existingRating._id;
+            }else{
+                return res.status(401).send({status:401,message:"First give a rating"});
+            }
+            const addReview = new Review(ReviewData);
+            await addReview.save();
             return res.status(200).send({status:200,message:"Review added successfully"});
         }
         return res.status(401).send({status:401,message:"You already write review for this product"});
@@ -100,4 +107,21 @@ const AddReview = async(req,res) => {
 
 // get total one product review logic
 
-module.exports = {AddRating, TotalRating, AddReview}
+const TotalReview = async (req,res) => {
+    const { product_id } = req.params;
+    const jwt_token = req.headers.authorization?.split(" ")[1];
+    const userID = getUserIdFromToken(jwt_token); 
+    try {
+        const reviews = await Review.find({product:product_id}).populate("user").populate("rating");
+        // const ratings = await Rating.find({product:product_id});
+        if(!reviews){
+            return res.status(400).send({status:400,message:"not found reviews on this product"});
+        }
+        const total_review = reviews.length;
+        return res.status(200).send({status:200,message:"success",reviews:reviews,total_review:total_review});
+    } catch (error) {
+        return res.status(400).send({status:400,message:error.message});
+    }
+}
+
+module.exports = {AddRating, TotalRating, AddReview, TotalReview}

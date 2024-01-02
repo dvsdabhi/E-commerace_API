@@ -92,7 +92,7 @@ const GetProductQty = async (req, res) => {
     product.save();
     return res.status(201).send({ msg: "Product qty updated." });
   } catch (error) {
-    console.log("error in qty..", error);
+    res.status(400).send({status:400,message:error.message});
   }
 };
 

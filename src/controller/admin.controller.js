@@ -221,7 +221,7 @@ const updateProduct = async(req,res) => {
       product: updated_product,
     });
   } catch (error) {
-    console.log(error.message);
+    return res.status(400).send({ message: error.message });
   }
 }
 

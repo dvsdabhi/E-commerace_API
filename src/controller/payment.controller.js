@@ -99,7 +99,7 @@ const paymentCheckout = async (req, res) => {
     const createdPaymentLink = await instance.paymentLink.create(
       paymentLinkRequest
     );
-    console.log("paymentLinkRequest----------------------", paymentLinkRequest);
+    // console.log("paymentLinkRequest----------------------", paymentLinkRequest);
     // Destructure relevant properties directly
     const { id: paymentLinkId, short_url: paymentLinkUrl } = createdPaymentLink;
 
@@ -168,7 +168,7 @@ const updatePaymentInformation = async (req, res) => {
   //   const paymentId = "";
   //   const { id } = req.params;
   const data = req.query;
-  console.log("data------------->>>>>>>>>>>>", data);
+  // console.log("data------------->>>>>>>>>>>>", data);
   try {
     const order = await Order.findById({ _id: data.id })
       .populate("user")

@@ -58,7 +58,7 @@ const order_details = async (req, res) => {
   // console.log("id=]", id1,id2 ); 
   try {
     const order = await Order.findById({ _id: id1 }).populate("shippingAddress");
-    console.log(order);
+    // console.log(order);
     if (!order) {
       return res.status(404).send({ error: "enter a valid order id" });
     }
