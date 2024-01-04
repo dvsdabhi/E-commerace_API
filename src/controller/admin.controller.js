@@ -60,8 +60,55 @@ const getProduct = async (req, res) => {
       message: "Product getted successfully!",
       product: product,
     });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(400).send({ message:error.message });
+  }
 };
+
+// get all dresse logic
+const AllDresses = async(req,res) => {
+  try {
+    const product = await Product.find();
+    if(!product){
+      return res.status(400).send({ status:400,message: "No product found!!" });
+    }
+    const dresses = product.filter((item)=>item.subChildCategory === "dresses");
+    return res.status(200).send({status:200,message:"success",dresses:dresses})
+  } catch (error) {
+    return res.status(400).send({ message : error.message });
+  }
+}
+
+// get all sarees logic
+const AllSarees = async(req,res) => {
+  try {
+    const product = await Product.find();
+    if(!product){
+      return res.status(400).send({ status:400,message: "No product found!!" });
+    }
+    const sarees = product.filter((item)=>item.subChildCategory === "sarees");
+    return res.status(200).send({status:200,message:"success",sarees:sarees})
+  } catch (error) {
+    return res.status(400).send({ message : error.message });
+  }
+}
+
+// get Similer product logic
+const SimilarProduct = async(req,res) => {
+  const {id} = req.params;
+  try{
+    const product = await Product.findById({_id:id});
+    if(!product){
+      return res.status(400).send({status:400,message:"not found product"});
+    }
+    const category = product.subChildCategory;
+    const similerproduct = await Product.find();
+    const SimilerPro = similerproduct.filter((item)=>item.subChildCategory === category && item._id != id);
+    return res.status(200).send({status:200,message:"success",product:SimilerPro});
+  }catch(error){
+    return res.status(400).send({message:error.message});
+  }
+}
 
 // get category product logic
 const getCategoryProduct = async(req,res) => {
@@ -236,4 +283,7 @@ module.exports = {
   allUser,
   updateProduct,
   getCategoryProduct,
+  AllDresses,
+  AllSarees,
+  SimilarProduct,
 };

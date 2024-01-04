@@ -12,6 +12,9 @@ router.put("/admin/orders/status/:order_Id", adminController.changeOrderStatus);
 router.put("/admin/product/update/:product_Id", adminController.updateProduct);
 router.delete("/admin/product/:product_Id", adminController.deleteProduct);
 router.delete("/admin/order/:order_Id", adminController.deleteOrder);
+router.get("/admin/dresses", adminController.AllDresses);
+router.get("/admin/sarees", adminController.AllSarees);
+router.get("/admin/similarproduct/:id", adminController.SimilarProduct);
 
 // router.post("/signin",authController.login);
 
