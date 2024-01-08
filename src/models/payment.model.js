@@ -13,6 +13,10 @@ const paymentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  order: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "orders",
+  },
 });
 
 const Payment = mongoose.model("payment", paymentSchema);

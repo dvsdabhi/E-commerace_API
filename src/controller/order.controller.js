@@ -8,27 +8,24 @@ const create_Order = async (req, res) => {
   const jwt_token = req.headers.authorization?.split(" ")[1];
   const userID = getUserIdFromToken(jwt_token);
   try {
-    const select_address = await shippingAddress.find({ user: userID });
-    // console.log("select_address", select_address);
-    for (const address of select_address) {
-      if (address.select === true) {
-        const order_data = new Order({
+    const select_address = await shippingAddress.find({ user: userID,select:true });
+    if (select_address.length > 0) {  
+      const order_data = new Order({
           totalPrice: data.totalPrice,
           totalDiscountedPrice: data.totalDiscountedPrice,
           discount: data.discount,
           totalItem: data.totalItem,
           user: userID,
-          shippingAddress: address._id,
+          shippingAddress: select_address[0]._id,
           buyProduct: data.buyProduct,
         });
         order_data.save();
         return res
           .status(200)
           .send({ status: 200, message: "success", order: order_data });
-      }
+    } else {
+      return res.status(200).send({ status: 201, message: "No selected address found" });
     }
-
-    return res.status(200).send({ status: 201, message: "faild" });
   } catch (error) {
     return res.status(201).send({ status: 201, message: error.message });
   }
@@ -42,7 +39,6 @@ const get_Order = async (req, res) => {
     const order = await Order.find({ user: userID }).populate(
       "shippingAddress"
     );
-    // console.log(order);
     return res
       .status(200)
       .send({ status: 200, message: "success", order: order });
@@ -55,10 +51,8 @@ const get_Order = async (req, res) => {
 
 const order_details = async (req, res) => {
   const { id1,id2 } = req.params;
-  // console.log("id=]", id1,id2 ); 
   try {
     const order = await Order.findById({ _id: id1 }).populate("shippingAddress");
-    // console.log(order);
     if (!order) {
       return res.status(404).send({ error: "enter a valid order id" });
     }

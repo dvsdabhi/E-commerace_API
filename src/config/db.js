@@ -10,5 +10,7 @@ const connectDB = async () => {
       console.log(`Error connecting to the database. : ${err}`);
     });
 };
+mongoose.set('strictQuery', false);
+
 
 module.exports = connectDB;

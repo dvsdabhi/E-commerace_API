@@ -11,6 +11,13 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(cors());
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // Replace with your client's origin
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.get("/", (req, res) => {
   return res
     .status(200)
@@ -43,6 +50,9 @@ app.use("/api", searchRouter);
 
 const reviewRouter = require("./src/Routes/review.route.js");
 app.use("/api", reviewRouter);
+
+const sendOtpRouter = require("./src/Routes/email.route.js");
+app.use("/api",sendOtpRouter);
 
 app.listen(PORT, async () => {
   await DB();
